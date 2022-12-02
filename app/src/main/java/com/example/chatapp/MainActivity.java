@@ -2,6 +2,8 @@ package com.example.chatapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,8 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chatapp.models.User;
-
+import com.example.chatapp.models.MainUser;
+import com.example.chatapp.FriendsActivity;
 public class MainActivity extends AppCompatActivity {
 
     EditText usernameView;
@@ -18,13 +20,10 @@ public class MainActivity extends AppCompatActivity {
     EditText passwordView ;
     Button signButton ;
     TextView textAccountCheckerView;
+    boolean isSigningUp=true;
 
     boolean haveAccount=false;
-
-
-
-
-
+    MainUser mainUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +63,15 @@ public class MainActivity extends AppCompatActivity {
                      usernameView.setVisibility(View.GONE);
                      signButton.setText("Log In");
                      textAccountCheckerView.setText("Don't have an account ? SignUp");
-
+                     isSigningUp=false;
 
 
                  }else{
+
                      usernameView.setVisibility(View.VISIBLE);
                      signButton.setText("Sign Up");
                      textAccountCheckerView.setText("Already have an account ? LogIn");
-
+                     isSigningUp=true;
 
 
 
@@ -85,16 +85,20 @@ public class MainActivity extends AppCompatActivity {
 
 
         signButton.setOnClickListener(new View.OnClickListener() {
+
+
+
             @Override
             public void onClick(View view) {
+                if(isSigningUp){
+                    handleSignup();
+                }else{
+                    handleLogIn();
+                }
 
-                String username=usernameView.getText().toString();
-                String email=emailView.getText().toString();
-                String password=passwordView.getText().toString();
 
-                User user =new User(username,email,password);
 
-                user.postUserData();
+
 
 
             }
@@ -104,6 +108,51 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private  void handleSignup(){
+        String username=usernameView.getText().toString();
+        String email=emailView.getText().toString();
+        String password=passwordView.getText().toString();
+        if(password.isEmpty() || email.isEmpty() || ( username.isEmpty() &&  isSigningUp)){
+
+            Toast.makeText(MainActivity.this,"Invalid input",Toast.LENGTH_LONG).show();
+            return ;
+        }
+        mainUser =new MainUser(username,email,password);
+        mainUser.setCurrentActivity( this);
+        mainUser.signUp();
+
+    }
+
+    private void handleLogIn(){
+
+        String email=emailView.getText().toString();
+        String password=passwordView.getText().toString();
+
+        if(password.isEmpty() || email.isEmpty()){
+
+            Toast.makeText(MainActivity.this,"Invalid input",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+
+
+        mainUser =new MainUser("",email,password);
+        mainUser.setCurrentActivity(this);
+
+        mainUser.setNextActivity(new FriendsActivity());
+
+
+        mainUser.logIn();
+
+
+
+
+
+
+
+
+
+    }
 
 
 

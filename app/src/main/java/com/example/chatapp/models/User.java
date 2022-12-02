@@ -1,36 +1,17 @@
 package com.example.chatapp.models;
 
-import android.util.Log;
-
 public class User {
+    private String username;
+    private String email;
 
-    String username;
-    String email;
-    String password;
 
-    User(){
+    public User(){
 
     }
-
-    public User(String username, String email, String password) {
+    public User(String username,String email) {
         this.username = username;
-        this.email = email;
-        this.password = password;
+        this.email=email;
     }
-
-    public void postUserData(){
-
-        //will post userData to firebase
-
-        Log.d("userData", username);
-
-    }
-
-
-
-
-
-
 
 
     public String getUsername() {
@@ -48,14 +29,4 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
 }
