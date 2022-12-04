@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.example.chatapp.models.MainUser;
 import com.example.chatapp.FriendsActivity;
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText usernameView;
@@ -34,7 +36,10 @@ public class MainActivity extends AppCompatActivity {
          passwordView = findViewById(R.id.user_password);
          signButton = findViewById(R.id.button);
          textAccountCheckerView= findViewById(R.id.have_account);
-
+         if (FirebaseAuth.getInstance().getCurrentUser()!=null){
+             startActivity(new Intent(MainActivity.this,FriendsActivity.class));
+             finish();
+         }
 
 
          if(haveAccount){
@@ -132,6 +137,9 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(MainActivity.this,"Invalid input",Toast.LENGTH_LONG).show();
             return;
+        }
+        else{
+            startActivity(new Intent(MainActivity.this,FriendsActivity.class));
         }
 
 
