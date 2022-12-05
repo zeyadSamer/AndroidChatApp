@@ -37,12 +37,11 @@ public class MainActivity extends AppCompatActivity {
          passwordView = findViewById(R.id.user_password);
          signButton = findViewById(R.id.button);
          textAccountCheckerView= findViewById(R.id.have_account);
-         if (FirebaseAuth.getInstance().getCurrentUser()!=null){
-             startActivity(new Intent(MainActivity.this,FriendsActivity.class));
-             finish();
-         }
+        if(AuthenticatedUser.isThereCurrentUser()){
+            startActivity(new Intent(this,FriendsActivity.class));
+            finish();
 
-
+        }
 
 
 
