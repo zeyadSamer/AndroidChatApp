@@ -37,7 +37,10 @@ public class MainActivity extends AppCompatActivity {
          passwordView = findViewById(R.id.user_password);
          signButton = findViewById(R.id.button);
          textAccountCheckerView= findViewById(R.id.have_account);
-
+         if (FirebaseAuth.getInstance().getCurrentUser()!=null){
+             startActivity(new Intent(MainActivity.this,FriendsActivity.class));
+             finish();
+         }
 
 
 
@@ -138,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(MainActivity.this,"Invalid input",Toast.LENGTH_LONG).show();
             return;
+        }
+        else{
+            startActivity(new Intent(MainActivity.this,FriendsActivity.class));
         }
 
 
