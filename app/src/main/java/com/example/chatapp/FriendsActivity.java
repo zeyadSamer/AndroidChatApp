@@ -27,7 +27,6 @@ public class FriendsActivity extends AppCompatActivity implements Serializable {
         String email=intent.getStringExtra("email");
         String username=intent.getStringExtra("username");
         AuthenticatedUser authenticatedUser=new AuthenticatedUser(username,email);
-        Log.d("friend", authenticatedUser.getEmail());
 
 
 

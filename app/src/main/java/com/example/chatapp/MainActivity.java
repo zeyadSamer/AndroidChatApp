@@ -11,8 +11,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chatapp.models.AuthenticatedUser;
 import com.example.chatapp.models.MainUser;
 import com.example.chatapp.FriendsActivity;
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText usernameView;
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
          passwordView = findViewById(R.id.user_password);
          signButton = findViewById(R.id.button);
          textAccountCheckerView= findViewById(R.id.have_account);
+
+
+
 
 
 
