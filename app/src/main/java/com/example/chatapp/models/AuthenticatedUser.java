@@ -1,13 +1,32 @@
 package com.example.chatapp.models;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.util.Log;
 
-import com.example.chatapp.FriendsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class AuthenticatedUser extends User{
+import java.io.Serializable;
+
+public class AuthenticatedUser extends User implements Serializable {
+
+    public String profilePic;
+
+    public UserSettings settings;
+
+    public AuthenticatedUser() {
+        super();
+        this.fetchAuthenticatedUserData();
+
+        settings=new UserSettings();
+    }
+
+    public AuthenticatedUser(String username, String email,String profilePic) {
+        super(username, email);
+        this.profilePic=profilePic;
+        this.fetchAuthenticatedUserData();
+        settings=new UserSettings();
+    }
+
+
 
     public static boolean isThereCurrentUser(){
 
@@ -23,13 +42,25 @@ public class AuthenticatedUser extends User{
         FirebaseAuth.getInstance().signOut();
     }
 
-    public AuthenticatedUser() {
-        super();
+
+
+
+
+    public void fetchAuthenticatedUserData(){
+
+    setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+
     }
 
-    public AuthenticatedUser(String username, String email) {
-        super(username, email);
+
+
+    public String getProfilePic() {
+        return profilePic;
     }
 
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
 
+    }
 }

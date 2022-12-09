@@ -5,36 +5,30 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.chatapp.models.AuthenticatedUser;
-import com.example.chatapp.models.MainUser;
-import com.google.gson.Gson;
 
 import java.io.Serializable;
 
 public class FriendsActivity extends AppCompatActivity implements Serializable {
 
     TextView textView;
+    AuthenticatedUser authenticatedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
+//        String email=intent.getStringExtra("email");
+//        String username=intent.getStringExtra("username");
+//        AuthenticatedUser authenticatedUser=new AuthenticatedUser(username,email);
+//
+         Intent i= getIntent();
+        authenticatedUser = (AuthenticatedUser) i.getSerializableExtra("authUser");
 
-        Intent intent = getIntent();
-
-        String email=intent.getStringExtra("email");
-        String username=intent.getStringExtra("username");
-        AuthenticatedUser authenticatedUser=new AuthenticatedUser(username,email);
-
-
-
-        textView= findViewById(R.id.textView);
-        textView.setText(authenticatedUser.getEmail());
 
 
 
@@ -50,7 +44,10 @@ public class FriendsActivity extends AppCompatActivity implements Serializable {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId()==R.id.menu_item_profile){
-            startActivity(new Intent(FriendsActivity.this,Profile.class));
+            Intent i=new Intent(FriendsActivity.this,Profile.class);
+            i.putExtra("authenticatedUser",authenticatedUser);
+            startActivity(i);
+
         }
         return super.onOptionsItemSelected(item);
     }

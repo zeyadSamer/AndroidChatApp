@@ -2,7 +2,6 @@ package com.example.chatapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,9 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chatapp.models.AuthenticatedUser;
-import com.example.chatapp.models.MainUser;
-import com.example.chatapp.FriendsActivity;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.chatapp.models.RegisteringUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,7 +23,13 @@ public class MainActivity extends AppCompatActivity {
     boolean isSigningUp=true;
 
     boolean haveAccount=false;
-    MainUser mainUser;
+    RegisteringUser registeringUser;
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(false);
+        //Parameter boolean nonRoot - If false then this only works if the activity is the root of a task; if true it will work for any activity in a task.
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,14 @@ public class MainActivity extends AppCompatActivity {
          signButton = findViewById(R.id.button);
          textAccountCheckerView= findViewById(R.id.have_account);
         if(AuthenticatedUser.isThereCurrentUser()){
-            startActivity(new Intent(this,FriendsActivity.class));
+
+            Intent i=new Intent(this,FriendsActivity.class);
+
+            AuthenticatedUser authenticatedUser=new AuthenticatedUser();
+            i.putExtra("authUser",authenticatedUser);
+
+            startActivity(i);
+
             finish();
 
         }
@@ -125,9 +135,10 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this,"Invalid input",Toast.LENGTH_LONG).show();
             return ;
         }
-        mainUser =new MainUser(username,email,password);
-        mainUser.setCurrentActivity( this);
-        mainUser.signUp();
+        registeringUser =new RegisteringUser(username,email,password);
+        registeringUser.setCurrentActivity( this);
+        registeringUser.setNextActivity(new FriendsActivity());
+        registeringUser.signUp();
 
     }
 
@@ -142,18 +153,17 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         else{
-            startActivity(new Intent(MainActivity.this,FriendsActivity.class));
+            registeringUser =new RegisteringUser("",email,password);
+            registeringUser.setCurrentActivity(this);
+
+            registeringUser.setNextActivity(new FriendsActivity());
+
+
+            registeringUser.logIn();
+
+
         }
 
-
-
-        mainUser =new MainUser("",email,password);
-        mainUser.setCurrentActivity(this);
-
-        mainUser.setNextActivity(new FriendsActivity());
-
-
-        mainUser.logIn();
 
 
 

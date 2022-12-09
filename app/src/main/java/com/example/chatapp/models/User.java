@@ -1,8 +1,10 @@
 package com.example.chatapp.models;
 
-public class User {
-    private String username;
-    private String email;
+import java.io.Serializable;
+
+public abstract class User implements Serializable {
+    private String username="";
+    private String email="";
 
 
     public User(){

@@ -2,37 +2,33 @@ package com.example.chatapp.models;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 
-import com.example.chatapp.FriendsActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class MainUser extends User {
+public class RegisteringUser extends User implements Serializable  {
 
 
 
-    private String password;
+    private String password="";
     private final FirebaseAuth firebaseAuth;
-    public boolean isSignedUp=false;
-    public boolean isLoggedIn=false;
+
     private Activity currentActivity;
     private Activity nextActivity;
 
 
-    public MainUser(){
+    public RegisteringUser(){
         super();
 
 
@@ -42,7 +38,7 @@ public class MainUser extends User {
 
 
 
-    public MainUser(String username, String email, String password) {
+    public RegisteringUser(String username, String email, String password) {
         super(username,email);
 
         this.password = password;
@@ -63,16 +59,23 @@ public class MainUser extends User {
 
                 Log.d("success register",String.valueOf(task.isSuccessful()));
                 if(task.isSuccessful()){
+                    Toast.makeText(RegisteringUser.this.currentActivity,"SignedUp Successfully",Toast.LENGTH_LONG).show();
 
-                    MainUser.this.isSignedUp=true;
-                    Toast.makeText(MainUser.this.currentActivity,"SignedUp Successfully",Toast.LENGTH_LONG).show();
+                    AuthenticatedUser authenticatedUser=new AuthenticatedUser(RegisteringUser.this.getUsername(), RegisteringUser.this.getEmail()," ");
+                    FirebaseDatabase.getInstance().getReference("user/"+FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(authenticatedUser);
+                    Intent i= new Intent(RegisteringUser.this.currentActivity, RegisteringUser.this.nextActivity.getClass());
+
+                    i.putExtra("authUser",authenticatedUser);
+                    currentActivity.startActivity(i);
+                    currentActivity.finish();
+
 
 
                 }else if(!task.isSuccessful()){
-                    MainUser.this.isSignedUp=false;
+
 
                     Log.d("firebase:", Objects.requireNonNull(task.getException()).getLocalizedMessage());
-                    Toast.makeText(MainUser.this.currentActivity,"signUp failed",Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisteringUser.this.currentActivity,"signUp failed",Toast.LENGTH_LONG).show();
 
 
 
@@ -100,29 +103,27 @@ public class MainUser extends User {
 
 
                 if (task.isSuccessful()){
-                    MainUser.this.isLoggedIn=true;
-
-                    Toast.makeText(MainUser.this.currentActivity,"Successfully loggedIn",Toast.LENGTH_LONG).show();
-
-                    Intent i= new Intent(MainUser.this.currentActivity, MainUser.this.nextActivity.getClass());
-                    Log.d("emailDebug",MainUser.this.getEmail());
-//
-
-                 i.putExtra("email",MainUser.this.getEmail());
-                 i.putExtra("username" ,MainUser.this.getUsername());
 
 
-                   // i.putExtra("mainUser", (Serializable) MainUser.this);
+                    Toast.makeText(RegisteringUser.this.currentActivity,"Successfully loggedIn",Toast.LENGTH_LONG).show();
 
+                    //we may need to get userdata from db here
+
+                    AuthenticatedUser authenticatedUser=new AuthenticatedUser(RegisteringUser.this.getUsername(), RegisteringUser.this.getEmail()," ");
+
+                    Intent i= new Intent(RegisteringUser.this.currentActivity, RegisteringUser.this.nextActivity.getClass());
+
+                    i.putExtra("authUser",authenticatedUser);
                     currentActivity.startActivity(i);
+                    currentActivity.finish();
 
 
 
-                }else{
-                    MainUser.this.isLoggedIn=false;
+                }else if(!task.isSuccessful()){
+
 
                     Log.d("SignUp error", task.getException().getLocalizedMessage());
-                    Toast.makeText(MainUser.this.currentActivity,"Login Failed",Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisteringUser.this.currentActivity,"Login Failed",Toast.LENGTH_LONG).show();
 
 
                 }
@@ -153,6 +154,7 @@ public class MainUser extends User {
     public void setPassword(String password) {
         this.password = password;
     }
+
 
 
 }
