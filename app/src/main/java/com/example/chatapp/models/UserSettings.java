@@ -14,6 +14,7 @@ import com.example.chatapp.Profile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -24,22 +25,22 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public class UserSettings implements Serializable {
-    Uri imagePath;
+
+
+    private Uri imagePath;
     private Activity activity;
 
 
     public UserSettings(){}
-    public UserSettings(Activity activity){
-        this.activity=activity;
-    }
 
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
+    public Activity getActivity(){return this.activity;}
 
     public void getPhotoFromUserDevice(){
 
-        Intent intent = new Intent();
+      Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         this.activity.startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
@@ -49,7 +50,7 @@ public class UserSettings implements Serializable {
 
 
 
-    public Bitmap createImageBitmap(){
+   public Bitmap createImageBitmap(){
         Bitmap bitmap = null;
 
         try {
@@ -139,8 +140,9 @@ public class UserSettings implements Serializable {
     }
 
 
-
-
+    public Uri getImagePath() {
+        return imagePath;
+    }
 
 
 

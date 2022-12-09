@@ -11,7 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chatapp.models.AuthenticatedUser;
-import com.example.chatapp.models.RegisteringUser;
+import com.example.chatapp.models.NewUser;
+import com.example.chatapp.models.RegisteredUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
     boolean isSigningUp=true;
 
     boolean haveAccount=false;
-    RegisteringUser registeringUser;
+    RegisteredUser registeredUser;
+    NewUser newUser;
 
     @Override
     public void onBackPressed() {
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
          passwordView = findViewById(R.id.user_password);
          signButton = findViewById(R.id.button);
          textAccountCheckerView= findViewById(R.id.have_account);
+
+
+
         if(AuthenticatedUser.isThereCurrentUser()){
 
             Intent i=new Intent(this,FriendsActivity.class);
@@ -113,12 +118,6 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     handleLogIn();
                 }
-
-
-
-
-
-
             }
         });
 
@@ -135,10 +134,10 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this,"Invalid input",Toast.LENGTH_LONG).show();
             return ;
         }
-        registeringUser =new RegisteringUser(username,email,password);
-        registeringUser.setCurrentActivity( this);
-        registeringUser.setNextActivity(new FriendsActivity());
-        registeringUser.signUp();
+        newUser =new NewUser(username,email,password);
+        newUser.setCurrentActivity( this);
+        newUser.setNextActivity(new FriendsActivity());
+        newUser.signUp();
 
     }
 
@@ -153,13 +152,10 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         else{
-            registeringUser =new RegisteringUser("",email,password);
-            registeringUser.setCurrentActivity(this);
-
-            registeringUser.setNextActivity(new FriendsActivity());
-
-
-            registeringUser.logIn();
+            registeredUser =new RegisteredUser("",email,password,"");
+            registeredUser.setCurrentActivity(this);
+            registeredUser.setNextActivity(new FriendsActivity());
+            registeredUser.logIn();
 
 
         }

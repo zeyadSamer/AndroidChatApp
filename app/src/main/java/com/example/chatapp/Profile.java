@@ -45,7 +45,7 @@ public class Profile extends AppCompatActivity {
     TextView userEmailTextView;
     ImageView profilePicture;
     AuthenticatedUser authenticatedUser;
-    Uri imagePath;
+
     Button uploadButton;
 
 
@@ -63,8 +63,13 @@ public class Profile extends AppCompatActivity {
         authenticatedUser=(AuthenticatedUser) getIntent().getSerializableExtra("authenticatedUser");
         authenticatedUser.settings.setActivity(this);
 
+        //just incase we automatically signedin
+        authenticatedUser.fetchAuthenticatedUserData();
 
-        userEmailTextView.setText(authenticatedUser.getEmail());
+        Log.d("profile","email:"+authenticatedUser.email);
+
+
+        userEmailTextView.setText(authenticatedUser.email);
 
 
         logOutButton.setOnClickListener(new View.OnClickListener() {

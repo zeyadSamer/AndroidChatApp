@@ -3,32 +3,30 @@ package com.example.chatapp.models;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
 
-public class AuthenticatedUser extends User implements Serializable {
+public class AuthenticatedUser extends RegisteredUser implements Serializable {
 
-    public String profilePic;
 
-    public UserSettings settings;
+  @Exclude public UserSettings settings;
 
-    public AuthenticatedUser() {
+      public AuthenticatedUser() {
         super();
         this.fetchAuthenticatedUserData();
-
         settings=new UserSettings();
     }
 
-    public AuthenticatedUser(String username, String email,String profilePic) {
-        super(username, email);
-        this.profilePic=profilePic;
+    public AuthenticatedUser(String username, String email,String password,String profilePic) {
+        super(username, email,password,profilePic);
         this.fetchAuthenticatedUserData();
         settings=new UserSettings();
     }
 
 
 
-    public static boolean isThereCurrentUser(){
+    @Exclude public static boolean isThereCurrentUser(){
 
         if(FirebaseAuth.getInstance().getCurrentUser()!=null){
             Log.d("isThereCurrentUser: ",FirebaseAuth.getInstance().getCurrentUser().getEmail());
@@ -38,7 +36,7 @@ public class AuthenticatedUser extends User implements Serializable {
 
     }
 
-    public static void signOut(){
+    @Exclude public static void signOut(){
         FirebaseAuth.getInstance().signOut();
     }
 
@@ -46,21 +44,19 @@ public class AuthenticatedUser extends User implements Serializable {
 
 
 
-    public void fetchAuthenticatedUserData(){
+    @Exclude   public void fetchAuthenticatedUserData(){
 
-    setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+ //   setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+ this.email=FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-
-    }
-
-
-
-    public String getProfilePic() {
-        return profilePic;
-    }
-
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
+        Log.d("email;", "fetchAuthenticatedUserData: "+this.email);
 
     }
+
+
+
+
+
+
+
 }

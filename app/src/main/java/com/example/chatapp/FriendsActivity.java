@@ -15,21 +15,15 @@ import java.io.Serializable;
 
 public class FriendsActivity extends AppCompatActivity implements Serializable {
 
-    TextView textView;
+
     AuthenticatedUser authenticatedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
-//        String email=intent.getStringExtra("email");
-//        String username=intent.getStringExtra("username");
-//        AuthenticatedUser authenticatedUser=new AuthenticatedUser(username,email);
-//
          Intent i= getIntent();
         authenticatedUser = (AuthenticatedUser) i.getSerializableExtra("authUser");
-
-
 
 
 
