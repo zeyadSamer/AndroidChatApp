@@ -9,7 +9,7 @@ public class Friend extends RegisteredUser{
     public void logIn() {
         System.out.println(" Cannot login from friend instance");
     }
-}
+
 
 
 
