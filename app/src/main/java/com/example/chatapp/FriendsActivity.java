@@ -57,12 +57,10 @@ public class FriendsActivity extends AppCompatActivity implements Serializable {
         authenticatedUser.fetchFriends();
 
 
-        friends = new ArrayList<>();
-
         userClickListener=new UsersAdapter.OnUserClickListener() {
             @Override
             public void onUserClicked(int position) {
-                Toast.makeText(FriendsActivity.this,"userClicked:"+friends.get(position).username,Toast.LENGTH_LONG).show();
+                Toast.makeText(FriendsActivity.this,"userClicked:"+authenticatedUser.friends.get(position).username,Toast.LENGTH_LONG).show();
             }
         };
 
