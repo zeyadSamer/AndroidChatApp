@@ -34,11 +34,12 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URL;
 import java.util.UUID;
 
-public class Profile extends AppCompatActivity {
+public class Profile extends AppCompatActivity  {
 
 
     Button logOutButton;

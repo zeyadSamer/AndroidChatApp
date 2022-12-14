@@ -2,7 +2,16 @@ package com.example.chatapp.models;
 
 import android.util.Log;
 
-public class Friend extends RegisteredUser{
+import java.io.Serializable;
+
+public class Friend extends RegisteredUser implements Serializable {
+
+
+
+
+
+
+
 
 
     @Override

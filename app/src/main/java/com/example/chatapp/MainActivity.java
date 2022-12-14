@@ -14,7 +14,9 @@ import com.example.chatapp.models.AuthenticatedUser;
 import com.example.chatapp.models.NewUser;
 import com.example.chatapp.models.RegisteredUser;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.Serializable;
+
+public class MainActivity extends AppCompatActivity  {
 
     EditText usernameView;
     EditText emailView;
