@@ -38,18 +38,16 @@ public class MessageActivity extends AppCompatActivity {
     private ImageView friendImagetoolBar;
     private ImageView sendMessageImg;
    private AuthenticatedUser authenticatedUser;
-    private Friend roomMate;
+
 
 private MessageAdapter messageAdapter;
-    private ArrayList<Message>messages;
+
 
     String roomMateUserName,chatRoomId,roomMateEmail,roomMateImg,myImg;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
@@ -58,9 +56,6 @@ private MessageAdapter messageAdapter;
         editMessageText=findViewById(R.id.editText);
         txtChattingWith =findViewById(R.id.txt_chatting_with);
         progressBar=findViewById(R.id.progressMessagesBar);
-        messages=new ArrayList<>();
-
-
 
         sendMessageImg=findViewById(R.id.imgSendMessage);
         friendImagetoolBar=findViewById(R.id.img_toolbar);
@@ -70,28 +65,30 @@ private MessageAdapter messageAdapter;
         authenticatedUser.fetchDataAndFriends();
 
         roomMateEmail=getIntent().getStringExtra("emailOfRoomMate");
-
         roomMateImg=getIntent().getStringExtra("imgOfRoomMate");
         myImg=getIntent().getStringExtra("myImg");
+
+
+
 
         sendMessageImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseDatabase.getInstance().getReference("messages/"+chatRoomId).push().setValue(new Message(authenticatedUser.email,roomMateEmail,editMessageText.getText().toString()));
 
-            editMessageText.setText("");
+                authenticatedUser.sendMessage(chatRoomId,roomMateEmail,editMessageText.getText().toString());
+                editMessageText.setText("");
             }
         });
 
 
-
         roomMateUserName=getIntent().getStringExtra("usernameOfRoomMate");
-        Log.d("em","roomMateUsernamegot:"+roomMateUserName);
+
+
 
         txtChattingWith.setText(roomMateUserName);
 
 
-        messageAdapter=new MessageAdapter(messages,myImg,roomMateImg,this);
+        messageAdapter=new MessageAdapter(authenticatedUser.messages,myImg,roomMateImg,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(messageAdapter);
 
@@ -156,16 +153,16 @@ private MessageAdapter messageAdapter;
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                messages.clear();
+                authenticatedUser.messages.clear();
 
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()){
 
-                    messages.add(dataSnapshot.getValue(Message.class));
-
+                    MessageActivity.this.authenticatedUser.addMessage(dataSnapshot.getValue(Message.class));
 
                 }
+
                 messageAdapter.notifyDataSetChanged();
-                recyclerView.scrollToPosition(messages.size()-1);
+                recyclerView.scrollToPosition(authenticatedUser.messages.size()-1);
                 recyclerView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
 

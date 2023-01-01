@@ -19,7 +19,7 @@ public class AuthenticatedUser extends RegisteredUser implements Serializable {
 
 
     public ArrayList<Friend> friends;
-
+    public ArrayList<Message> messages=new ArrayList<>();
 
   @Exclude public UserSettings settings;
 
@@ -123,11 +123,31 @@ public class AuthenticatedUser extends RegisteredUser implements Serializable {
 
 
 
-
-
-
    }
 
+
+    public void sendMessage(String chatRoomId,String receiverEmail,String messageContent){
+
+          Message messageToBeSent=new Message(this.email,receiverEmail,messageContent);
+
+        FirebaseDatabase.getInstance().getReference("messages/"+chatRoomId).push().setValue(messageToBeSent);
+
+
+
+
+    }
+
+
+    public void addMessage(Message message){
+
+
+
+          this.messages.add(message);
+
+
+
+
+    }
 
 
 
