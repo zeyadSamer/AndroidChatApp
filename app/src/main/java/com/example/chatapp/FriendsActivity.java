@@ -13,29 +13,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.chatapp.adapters.UsersAdapter;
 import com.example.chatapp.models.AuthenticatedUser;
-import com.example.chatapp.models.Friend;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class FriendsActivity extends AppCompatActivity implements Serializable {
 
 
    private AuthenticatedUser authenticatedUser;
     private RecyclerView recyclerView;
-    private ArrayList<Friend> friends;
+//    private ArrayList<Friend> friends;
     private ProgressBar progressBar;
     private  UsersAdapter usersAdapter;
     private UsersAdapter.OnUserClickListener userClickListener;
@@ -53,22 +42,29 @@ public class FriendsActivity extends AppCompatActivity implements Serializable {
         recyclerView =findViewById(R.id.recycleView);
         progressBar =findViewById(R.id.progressBar);
         swipeRefreshLayout=findViewById(R.id.swipeRefreshLayout);
-        authenticatedUser.fetchAuthenticatedUserData();
-        authenticatedUser.fetchFriends();
+       // authenticatedUser.fetchAuthenticatedUserData();
+        authenticatedUser.fetchDataAndFriends();
 
 
         userClickListener=new UsersAdapter.OnUserClickListener() {
             @Override
             public void onUserClicked(int position) {
-                Toast.makeText(FriendsActivity.this,"userClicked:"+authenticatedUser.friends.get(position).username,Toast.LENGTH_LONG).show();
+
+                Intent i=new Intent(FriendsActivity.this,MessageActivity.class);
+                i.putExtra("authenticatedUser",authenticatedUser);
+                i.putExtra("usernameOfRoomMate",authenticatedUser.friends.get(position).username);
+                i.putExtra("emailOfRoomMate",authenticatedUser.friends.get(position).email);
+                i.putExtra("imgOfRoomMate",authenticatedUser.friends.get(position).profilePic);
+                i.putExtra("myImg",authenticatedUser.profilePic);
+                i.putExtra("myUsername",authenticatedUser.username);
+
+                startActivity(i);
             }
         };
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
-
                 getUsers();
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -100,33 +96,14 @@ public class FriendsActivity extends AppCompatActivity implements Serializable {
 
 
 
-  private  void getUsers(){
-
-
-
-      synchronized (this){
-
+  private void getUsers(){
 
       usersAdapter=new UsersAdapter(FriendsActivity.this, authenticatedUser.friends,userClickListener);
       recyclerView.setLayoutManager(new LinearLayoutManager(FriendsActivity.this));
       recyclerView.setAdapter(usersAdapter);
       progressBar.setVisibility(View.GONE);
       recyclerView.setVisibility(View.VISIBLE);
-          authenticatedUser.fetchFriends();
-
-
-
-     ;
-
-
-
-  }
-
-
-
-
-
-
+      authenticatedUser.fetchDataAndFriends();
 
 
 

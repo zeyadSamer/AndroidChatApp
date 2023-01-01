@@ -16,6 +16,10 @@
         android:theme="@style/Theme.ChatApp"
         tools:targetApi="31">
         <activity
+            android:name=".MessageActivity"
+            android:theme="@style/StyleWithoutToolbar"
+            android:exported="false" />
+        <activity
             android:name=".Profile"
             android:exported="false">
             <meta-data

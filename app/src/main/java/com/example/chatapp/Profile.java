@@ -1,43 +1,18 @@
 package com.example.chatapp;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.chatapp.models.AuthenticatedUser;
-import com.example.chatapp.models.UserSettings;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.UploadTask;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
-import java.net.URL;
-import java.util.UUID;
 
 public class Profile extends AppCompatActivity  {
 
@@ -62,10 +37,11 @@ public class Profile extends AppCompatActivity  {
         //getCurrentUserImage();
 
         authenticatedUser=(AuthenticatedUser) getIntent().getSerializableExtra("authenticatedUser");
+
         authenticatedUser.settings.setActivity(this);
 
         //just incase we automatically signedin
-        authenticatedUser.fetchAuthenticatedUserData();
+        authenticatedUser.fetchAuthenticatedUserEmail();
 
         Log.d("profile","email:"+authenticatedUser.email);
 

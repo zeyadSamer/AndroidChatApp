@@ -1,13 +1,9 @@
 package com.example.chatapp.models;
 
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.chatapp.FriendsActivity;
-import com.example.chatapp.adapters.UsersAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,7 +25,7 @@ public class AuthenticatedUser extends RegisteredUser implements Serializable {
 
       public AuthenticatedUser() {
         super();
-        this.fetchAuthenticatedUserData();
+        this.fetchAuthenticatedUserEmail();
         settings=new UserSettings();
           //friends= new ArrayList<>();
 
@@ -37,7 +33,7 @@ public class AuthenticatedUser extends RegisteredUser implements Serializable {
 
     public AuthenticatedUser(String username, String email,String password,String profilePic) {
         super(username, email,password,profilePic);
-        this.fetchAuthenticatedUserData();
+        this.fetchAuthenticatedUserEmail();
         settings=new UserSettings();
        // friends= new ArrayList<>();
 
@@ -65,50 +61,57 @@ public class AuthenticatedUser extends RegisteredUser implements Serializable {
     }
 
 
+    @Exclude public void fetchAuthenticatedUserEmail(){
+
+        this.email=FirebaseAuth.getInstance().getCurrentUser().getEmail();
+/*
+        FirebaseDatabase.getInstance().getReference("user").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
 
-    @Exclude   public void fetchAuthenticatedUserData(){
-
- //   setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
- this.email=FirebaseAuth.getInstance().getCurrentUser().getEmail();
-
+        */
         Log.d("email;", "fetchAuthenticatedUserData: "+this.email);
-
     }
 
 
 
-
-
-
-   @Exclude public synchronized void fetchFriends(){
+   @Exclude public  void fetchDataAndFriends(){
 
 
 
           friends=new ArrayList<>();
-          Object lock=new Object();
+
+       this.email=FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
         FirebaseDatabase.getInstance().getReference("user").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()){
-
-
                     // in order not to add current user in list of friends
                     if(!Objects.equals(Objects.requireNonNull(dataSnapshot.getValue(Friend.class)).email, AuthenticatedUser.this.email)) {
                      friends.add(dataSnapshot.getValue(Friend.class));
+                    }else{
+
+                       AuthenticatedUser.this.username= dataSnapshot.getValue(AuthenticatedUser.class).username;
+                       AuthenticatedUser.this.profilePic=dataSnapshot.getValue(AuthenticatedUser.class).profilePic;
+
+
+
                     }
-
-
-
                 }
 
-
             }
-
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
