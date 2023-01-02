@@ -60,16 +60,7 @@ public class NewUser extends User {
 
                     AuthenticatedUser authenticatedUser=new AuthenticatedUser(NewUser.this.username, NewUser.this.email,NewUser.this.password,"");
                     FirebaseDatabase.getInstance().getReference("user/"+ FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(authenticatedUser);
-
-//
-//                    Intent i= new Intent(currentActivity,nextActivity.getClass());
-//
-//                    i.putExtra("authUser",authenticatedUser);
-//                     currentActivity.startActivity(i);
-//                    currentActivity.finish();
-//
-//
-
+                    
 
                 }else if(!task.isSuccessful()){
 

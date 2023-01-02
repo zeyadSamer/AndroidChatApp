@@ -38,7 +38,10 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
+
          usernameView=findViewById(R.id.username);
          emailView=findViewById(R.id.user_email);
          passwordView = findViewById(R.id.user_password);

@@ -1,8 +1,10 @@
 package com.example.chatapp.models;
 
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -14,11 +16,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public class AuthenticatedUser extends RegisteredUser implements Serializable {
 
 
-    public ArrayList<Friend> friends;
+    public ArrayList<Friend> friends=new ArrayList<>();
     public ArrayList<Message> messages=new ArrayList<>();
 
   @Exclude public UserSettings settings;
@@ -27,7 +30,7 @@ public class AuthenticatedUser extends RegisteredUser implements Serializable {
         super();
         this.fetchAuthenticatedUserEmail();
         settings=new UserSettings();
-          //friends= new ArrayList<>();
+
 
       }
 
@@ -35,7 +38,6 @@ public class AuthenticatedUser extends RegisteredUser implements Serializable {
         super(username, email,password,profilePic);
         this.fetchAuthenticatedUserEmail();
         settings=new UserSettings();
-       // friends= new ArrayList<>();
 
 
     }
@@ -62,34 +64,16 @@ public class AuthenticatedUser extends RegisteredUser implements Serializable {
 
 
     @Exclude public void fetchAuthenticatedUserEmail(){
-
         this.email=FirebaseAuth.getInstance().getCurrentUser().getEmail();
-/*
-        FirebaseDatabase.getInstance().getReference("user").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-
-
-        */
-        Log.d("email;", "fetchAuthenticatedUserData: "+this.email);
     }
 
 
 
-   @Exclude public  void fetchDataAndFriends(){
+   @Exclude public void fetchDataAndFriends(){
 
 
 
-          friends=new ArrayList<>();
+        friends=new ArrayList<>();
 
        this.email=FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
@@ -116,11 +100,11 @@ public class AuthenticatedUser extends RegisteredUser implements Serializable {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+
             }
 
 
         });
-
 
 
    }

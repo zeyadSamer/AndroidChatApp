@@ -1,25 +1,31 @@
 package com.example.chatapp;
 
+import static com.ea.async.Async.await;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.ea.async.Async;
 import com.example.chatapp.adapters.UsersAdapter;
 import com.example.chatapp.models.AuthenticatedUser;
 
 import java.io.Serializable;
+import java.util.concurrent.CompletableFuture;
 
 public class FriendsActivity extends AppCompatActivity implements Serializable {
+
 
 
    private AuthenticatedUser authenticatedUser;
@@ -35,6 +41,11 @@ public class FriendsActivity extends AppCompatActivity implements Serializable {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
          Intent i= getIntent();
@@ -42,8 +53,8 @@ public class FriendsActivity extends AppCompatActivity implements Serializable {
         recyclerView =findViewById(R.id.recycleView);
         progressBar =findViewById(R.id.progressBar);
         swipeRefreshLayout=findViewById(R.id.swipeRefreshLayout);
-       // authenticatedUser.fetchAuthenticatedUserData();
-        authenticatedUser.fetchDataAndFriends();
+
+        //authenticatedUser.fetchDataAndFriends();  ==>the error came from that line
 
 
         userClickListener=new UsersAdapter.OnUserClickListener() {
@@ -65,6 +76,7 @@ public class FriendsActivity extends AppCompatActivity implements Serializable {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 getUsers();
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -86,6 +98,7 @@ public class FriendsActivity extends AppCompatActivity implements Serializable {
         if(item.getItemId()==R.id.menu_item_profile){
             Intent i=new Intent(FriendsActivity.this,Profile.class);
             i.putExtra("authenticatedUser",authenticatedUser);
+            i.putExtra("myImg",authenticatedUser.profilePic);
             startActivity(i);
 
         }
@@ -98,13 +111,16 @@ public class FriendsActivity extends AppCompatActivity implements Serializable {
 
   private void getUsers(){
 
-      usersAdapter=new UsersAdapter(FriendsActivity.this, authenticatedUser.friends,userClickListener);
-      recyclerView.setLayoutManager(new LinearLayoutManager(FriendsActivity.this));
-      recyclerView.setAdapter(usersAdapter);
-      progressBar.setVisibility(View.GONE);
-      recyclerView.setVisibility(View.VISIBLE);
-      authenticatedUser.fetchDataAndFriends();
+
+      usersAdapter = new UsersAdapter(FriendsActivity.this, authenticatedUser.friends, userClickListener);
+            recyclerView.setLayoutManager(new LinearLayoutManager(FriendsActivity.this));
+            recyclerView.setAdapter(usersAdapter);
+            progressBar.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            authenticatedUser.fetchDataAndFriends();
 
 
+  }
 
-}}
+
+}

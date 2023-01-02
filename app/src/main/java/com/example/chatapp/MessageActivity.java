@@ -84,7 +84,6 @@ private MessageAdapter messageAdapter;
         roomMateUserName=getIntent().getStringExtra("usernameOfRoomMate");
 
 
-
         txtChattingWith.setText(roomMateUserName);
 
 

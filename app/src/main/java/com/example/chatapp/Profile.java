@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,7 +13,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.chatapp.models.AuthenticatedUser;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Profile extends AppCompatActivity  {
 
@@ -34,19 +38,23 @@ public class Profile extends AppCompatActivity  {
         profilePicture=findViewById(R.id.profile_img);
         uploadButton =findViewById(R.id.buttonUploadImage);
 
-        //getCurrentUserImage();
+
+
 
         authenticatedUser=(AuthenticatedUser) getIntent().getSerializableExtra("authenticatedUser");
-
         authenticatedUser.settings.setActivity(this);
-
-        //just incase we automatically signedin
         authenticatedUser.fetchAuthenticatedUserEmail();
+        authenticatedUser.profilePic=getIntent().getStringExtra("myImg");
 
-        Log.d("profile","email:"+authenticatedUser.email);
+
+        getCurrentUserImage();
+
 
 
         userEmailTextView.setText(authenticatedUser.email);
+
+
+
 
 
         logOutButton.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +90,7 @@ public class Profile extends AppCompatActivity  {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1 && resultCode==RESULT_OK && data!=null){
- //           imagePath=data.getData();
+
             authenticatedUser.settings.setImagePath(data.getData());
             getImageInImageView();
 
@@ -99,13 +107,12 @@ public class Profile extends AppCompatActivity  {
 
     }
 
-//   public void getCurrentUserImage(){
-//       String url=FirebaseDatabase.getInstance().getReference("user/"+FirebaseAuth.getInstance().getCurrentUser().getUid()+"/profilePic").toString();
-//      imagePath=Uri.parse(url);
-////      getImageInImageView();
-//
-//
-//   }
+   public void getCurrentUserImage(){
+
+       String url= FirebaseDatabase.getInstance().getReference("user/"+ FirebaseAuth.getInstance().getCurrentUser().getUid()+"/profilePic").toString();
+       Glide.with(this).load(authenticatedUser.profilePic).placeholder(R.drawable.account_img).error(R.drawable.account_img).into(profilePicture);
+
+   }
 
 
 
