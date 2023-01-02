@@ -109,7 +109,7 @@ public class AuthenticatedUser extends RegisteredUser implements Serializable {
 
    }
 
-
+//post message to firebase
     public void sendMessage(String chatRoomId,String receiverEmail,String messageContent){
 
           Message messageToBeSent=new Message(this.email,receiverEmail,messageContent);
@@ -121,15 +121,10 @@ public class AuthenticatedUser extends RegisteredUser implements Serializable {
 
     }
 
-
+//add the message to the arrayList messages to be shown on the screen
     public void addMessage(Message message){
 
-
-
           this.messages.add(message);
-
-
-
 
     }
 

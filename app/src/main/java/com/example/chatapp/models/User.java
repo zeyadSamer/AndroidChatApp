@@ -2,6 +2,7 @@ package com.example.chatapp.models;
 
 import android.app.Activity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ public abstract class User {
     public String username;
      public String email;
       public String password;
-
+    @Exclude public  FirebaseAuth firebaseAuth;
    @Exclude private Activity currentActivity;
     @Exclude private Activity nextActivity;
 

@@ -22,12 +22,12 @@ public class RegisteredUser extends User  {
 
 
     public String profilePic="";
-    @Exclude public  FirebaseAuth firebaseAuth;
+
 
 
     public RegisteredUser(){
         super();
-        firebaseAuth=FirebaseAuth.getInstance();
+       this.firebaseAuth=FirebaseAuth.getInstance();
     }
 
 

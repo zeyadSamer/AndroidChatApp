@@ -18,13 +18,13 @@ import java.util.Objects;
 
 public class NewUser extends User {
 
-    FirebaseAuth firebaseAuth;
+
 
     public NewUser(){
         super();
 
 
-        firebaseAuth=FirebaseAuth.getInstance();
+        this.firebaseAuth=FirebaseAuth.getInstance();
 
     }
 
